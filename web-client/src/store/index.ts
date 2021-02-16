@@ -2,6 +2,7 @@ import vue from "vue";
 import vuex from "vuex";
 import Auth from "@/api/auth"
 import { User } from "@/types"
+import { RedirectLoginOptions } from "@auth0/auth0-spa-js";
 
 vue.use(vuex);
 
@@ -54,10 +55,8 @@ export default new vuex.Store({
         async logout() {
             return await Auth.logout({ returnTo: window.location.origin });
         },
-        async login() {
-            return await Auth.loginWithRedirect({
-                redirect_uri: `${window.location.origin}/callback`
-            })
+        async login(options: RedirectLoginOptions = {redirect_uri: `${window.location.origin}/callback`}) {
+            return await Auth.loginWithRedirect(options)
         },
         async handleLoginCallback({ commit }) {
             try {

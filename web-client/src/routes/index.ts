@@ -6,10 +6,11 @@ import Contact from "../components/pages/Contact.vue";
 import Login from "../components/pages/Login.vue";
 import Callback from "../components/pages/Callback.vue";
 import Router from "vue-router";
+import { authGuard } from "@/middleware";
 
 Vue.use(Router);
 
-const router = new Router(
+const router: Router = new Router(
     {
         routes: [
             {
@@ -20,20 +21,24 @@ const router = new Router(
             {
                 path: "/app",
                 name: "app",
-                component: App
+                component: App,
+                beforeEnter: authGuard
             },
             {
                 path: "/settings",
-                component: Setting
+                component: Setting,
+                beforeEnter: authGuard
             },
             {
                 path: "/contacts",
-                component: Contact
+                component: Contact,
+                beforeEnter: authGuard
             },
             {
                 path: "/login",
                 name: "login",
-                component: Login
+                component: Login,
+                beforeEnter: authGuard
             },
             {
                 path: "/callback",
@@ -44,15 +49,5 @@ const router = new Router(
         mode: "history"
     }
 )
-
-// router.beforeEach(async (to, from, next) => {
-//     let user = await store.dispatch("getUser");
-//     if ((to.name !== 'login' || to.name !== 'home') && !user) {
-//         next({ name: 'login' })
-//     }
-//     else {
-//         next()
-//     }
-// })
 
 export default router;

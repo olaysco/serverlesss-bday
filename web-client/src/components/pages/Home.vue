@@ -178,7 +178,7 @@ import { mapState } from "vuex";
 
 @Component({
 	components: {},
-	computed: mapState(["authLoading", "isAuthenticated"]),
+	computed: mapState(["authLoading", "isAuthenticated", "user"]),
 })
 export default class Home extends Vue {
 	private showMobileMenu: boolean = false;
@@ -195,7 +195,9 @@ export default class Home extends Vue {
 	}
 
 	login() {
-		this.$store.dispatch("login");
+		this.$store.dispatch("login", {
+			redirect_uri: `${window.location.origin}/callback`,
+		});
 	}
 
 	logout() {
