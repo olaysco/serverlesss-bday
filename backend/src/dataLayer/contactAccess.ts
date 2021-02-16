@@ -12,7 +12,7 @@ export class ContactAccess {
     constructor(
         private readonly docClient: DocumentClient = createDynamoDBClient(),
         private readonly contactsTable = process.env.CONTACT_TABLE,
-        private readonly contactUserIndex = process.env.CONTACTS_USER_INDEX
+        private readonly contactUserIndex = process.env.CONTACT_USER_INDEX
     ) { }
 
     /**

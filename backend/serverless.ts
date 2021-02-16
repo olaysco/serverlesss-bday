@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
-import { hello, postContact } from './src/functions';
+import { postContact, updateContact, getContact } from './src/functions';
 
 const serverlessConfiguration: AWS = {
   service: 'backend',
@@ -40,13 +40,98 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       USERS_TABLE: 'Users-${self:provider.stage}',
-      USERS_CONTACT_TABLE: 'Users-contact-${self:provider.stage}',
+      CONTACT_TABLE: 'Users-contact-${self:provider.stage}',
+      CONTACT_USER_INDEX: "contactUserIndex"
     },
     stage: "${opt:stage, 'dev'}",
     region: 'us-west-2',
     lambdaHashingVersion: '20201221',
+    httpApi: {
+      authorizers: {
+        AuthO: {
+          identitySource: "$request.header.Authorization",
+          issuerUrl: "olaysco.us.auth0.com",
+          audience: [
+            "https:://olaysco-bday-auth",
+            "https:://olaysco-bday-auth"
+          ]
+        } 
+      }
+    }
   },
-  functions: { hello, postContact }
+  functions: { postContact, getContact, updateContact },
+  resources: {
+    Resources: {
+      UsersDynamoDBTable: {
+        Type: "AWS::DynamoDB::Table",
+        Properties: {
+          AttributeDefinitions: [
+            {
+              AttributeName: "id",
+              AttributeType: "S"
+            }
+          ],
+          KeySchema: [
+            {
+              AttributeName: "id",
+              KeyType: "HASH"
+            }
+          ],
+          BillingMode: "PAY_PER_REQUEST",
+          TableName: "${self:provider.environment.USERS_TABLE}"
+        }
+      },
+      UsersContactDynamoDBTable: {
+        Type: "AWS::DynamoDB::Table",
+        Properties: {
+          AttributeDefinitions: [
+            {
+              AttributeName: "id",
+              AttributeType: "S"
+            },
+            {
+              AttributeName: "userId",
+              AttributeType: "S"
+            },
+            {
+              AttributeName: "timestamp",
+              AttributeType: "S"
+            }
+          ],
+          KeySchema: [
+            {
+              AttributeName: "userId",
+              KeyType: "HASH"
+            },
+            {
+              AttributeName: "id",
+              KeyType: "RANGE"
+            }
+          ],
+          GlobalSecondaryIndexes: [
+            {
+              IndexName: "${self:provider.environment.CONTACT_USER_INDEX}",
+              KeySchema: [
+                {
+                  AttributeName: "userId",
+                  KeyType: "HASH"
+                },
+                {
+                  AttributeName: "createdAt",
+                  KeyType: "RANGE"
+                }
+              ],
+              Projection: {
+                ProjectionType: "ALL"
+              }
+            }
+          ],
+          BillingMode: "PAY_PER_REQUEST",
+          TableName: "${self:provider.environment.CONTACT_TABLE}"
+        }
+      },
+    }
+  }
 }
 
 module.exports = serverlessConfiguration;

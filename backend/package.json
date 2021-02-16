@@ -9,6 +9,7 @@
   "dependencies": {
     "@middy/core": "^1.5.0",
     "@middy/http-json-body-parser": "^1.5.0",
+    "aws-xray-sdk": "^3.2.0",
     "serverless-aws-documentation": "^1.1.0",
     "serverless-dynamodb-local": "^0.2.39",
     "serverless-iam-roles-per-function": "^3.1.0",
