@@ -21,3 +21,17 @@ export interface User {
     sub?: string;
     [key: string]: any;
 }
+
+export interface Contact {
+    id?: string,
+    userId?: string,
+    name: string,
+    email: string,
+    title: string,
+    monthOfBirth: number,
+    dayOfBirth: number,
+    createdAt?: string,
+    phoneNumber: string,
+    dateOfBirth: string
+    [key: string]: any
+}

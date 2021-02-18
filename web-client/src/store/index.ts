@@ -1,10 +1,17 @@
 import vue from "vue";
 import vuex from "vuex";
+import VuexPersistence from "vuex-persist";
 import Auth from "@/api/auth"
-import { User } from "@/types"
+import { Contact, User } from "@/types"
 import { RedirectLoginOptions } from "@auth0/auth0-spa-js";
+import contactApi from "@/api/contact";
 
 vue.use(vuex);
+
+const vuexPersist = new VuexPersistence<any>({
+  strictMode: true,
+  storage: sessionStorage,
+})
 
 export default new vuex.Store({
     state: {
@@ -17,14 +24,17 @@ export default new vuex.Store({
         },
         user: {},
         authLoading: <boolean>false,
-        isAuthenticated: <boolean>false
+        isAuthenticated: <boolean>false,
+        contact: <any>[],
+        busy: <boolean>false
     },
     mutations: {
+        RESTORE_MUTATION: vuexPersist.RESTORE_MUTATION, // this mutation **MUST** be named "RESTORE_MUTATION"
         showModal(state, modal) {
             state.visibleModal.push(modal);
         },
         hideModal(state, modal) {
-            state.visibleModal = state.visibleModal.filter(i => i == modal);
+            state.visibleModal = state.visibleModal.filter(i => i != modal);
         },
         toggleAlert(state, payload) {
             let {
@@ -49,10 +59,16 @@ export default new vuex.Store({
         },
         SET_IS_AUTHENTICATED(state, payload: boolean) {
             state.isAuthenticated = payload
+        },
+        SET_CONTACT(state, payload) {
+            state.contact = payload
+        },
+        SET_BUSY(state, payload: boolean) {
+            state.busy = payload
         }
     },
     actions: {
-        async logout() {
+        async LOGOUT() {
             return await Auth.logout({ returnTo: window.location.origin });
         },
         async login(options: RedirectLoginOptions = {redirect_uri: `${window.location.origin}/callback`}) {
@@ -67,6 +83,46 @@ export default new vuex.Store({
             } finally {
                 commit('SET_AUTH_LOADING', false)
             }
+        },
+        async GET_CONTACT({ commit }) {
+            commit('SET_BUSY', true)
+            const contact = await contactApi.getContact()
+            commit('SET_CONTACT', contact)
+            commit('SET_BUSY', false)
+        },
+        async POST_CONTACT({ commit, dispatch }, contact: Contact[]) {
+            try {
+                commit('SET_BUSY', true)
+                await contactApi.postContact(contact)
+                commit('toggleAlert', {visible: true, type: "success", title: "Success", message: "Contact successfully added"})
+                commit('SET_BUSY', false)
+                dispatch('GET_CONTACT')
+            } catch (e) {
+                commit('toggleAlert', {visible: true, type: "error", title: "Error", message: "An error occurred"})
+            }
+        },
+        async DELETE_CONTACT({ commit, dispatch }, contact: Contact) {
+            try {
+                commit('SET_BUSY', true)
+                await contactApi.deleteContact(contact)
+                commit('toggleAlert', {visible: true, type: "success", title: "Success", message: "Contact successfully added"})
+                commit('SET_BUSY', false)
+                dispatch('GET_CONTACT')
+            } catch (e) {
+                 commit('toggleAlert', {visible: true, type: "error", title: "Error", message: "An error occurred"})
+            }
+        },
+        async UPDATE_CONTACT({ commit, dispatch }, contact: Contact) {
+            try {
+                commit('SET_BUSY', true)
+                await contactApi.updateContact(contact)
+                commit('toggleAlert', {visible: true, type: "success", title: "Success", message: "Contact updated added"})
+                commit('SET_BUSY', false)
+                dispatch('GET_CONTACT')
+            } catch (e) {
+                 commit('toggleAlert', {visible: true, type: "error", title: "Error", message: "An error occurred"})
+            }
         }
-    }
+    },
+    plugins: [vuexPersist.plugin]
 });

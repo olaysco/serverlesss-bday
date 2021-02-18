@@ -58,6 +58,14 @@ const deleteContact = async (userId: string, id: string) => {
     return true
 }
 
+//getMonthDayCelebrants
+const monthDayCelebrants = async (month: number, day: number) => {
+    const date = new Date(`1900 ${month} ${day} 00:00:00`).toISOString();
+    logger.info(date)
+    return access.monthDayCelebrants(date)
+}
+
+//validate
 const validateContact = (userId: string, item: any) => {
     if (!item) {
         logger.error(`attempt to access a contact that doesn't exist`)
@@ -72,4 +80,4 @@ const validateContact = (userId: string, item: any) => {
     return true
 }
 
-export {createContact, getContacts, updateContact, deleteContact, createManyContact}
+export {createContact, getContacts, updateContact, deleteContact, createManyContact, monthDayCelebrants}

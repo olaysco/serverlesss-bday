@@ -40,7 +40,7 @@
 							</div>
 							<div class="flex flex-col flex-grow ml-4">
 								<div class="text-sm text-gray-500">Contacts</div>
-								<div class="font-bold text-lg">1259</div>
+								<div class="font-bold text-lg">{{contact.length}}</div>
 							</div>
 						</div>
 					</div>
@@ -53,7 +53,7 @@
 							</div>
 							<div class="flex flex-col flex-grow ml-4">
 								<div class="text-sm text-gray-500">Wallet Balance</div>
-								<div class="font-bold text-lg">30000</div>
+								<div class="font-bold text-lg">0</div>
 							</div>
 						</div>
 					</div>
@@ -65,7 +65,7 @@
 								<svg-icon name="cake-outline" class="fill-current" />
 							</div>
 							<div class="flex flex-col flex-grow ml-4">
-								<div class="text-sm text-gray-500">Today's celebrants</div>
+								<div class="text-sm text-gray-500">{{ month }}'s celebrants</div>
 								<div class="font-bold text-lg">3</div>
 							</div>
 						</div>
@@ -87,10 +87,14 @@ import SvgIcon from "../SvgIcon.vue";
 
 @Component({
 	components: { SvgIcon, MonthCelebrant, Layout },
-	computed: mapState(["user"]),
+	computed: mapState(["user", "contact"]),
 })
 export default class App extends Vue {
 	public user!: any;
+
+	get month() {
+		return new Date().toLocaleString("default", { month: "long" });
+	}
 }
 </script>
 <style scoped>

@@ -18,23 +18,18 @@
 					<svg-icon name="warning" />
 				</span>
 				<span class="text-blue-500" v-if="alertData.type == 'info'">
-					<svg-icon name="info"
-				/></span>
+					<svg-icon name="info" />
+				</span>
 			</div>
 			<div class="alert-content ml-4">
-				<div class="alert-title font-semibold text-lg">
-					{{ alertData.title }}
-				</div>
-				<div class="alert-description text-sm text-red-600">
-					{{ alertData.message }}
-				</div>
+				<div class="alert-title font-semibold text-lg">{{ alertData.title }}</div>
+				<div class="alert-description text-sm">{{ alertData.message }}</div>
 			</div>
 			<a
 				href="#"
 				@click.prevent="close()"
 				class="absolute right-0 left-0 mr-2 mt-2 top-0 text-right opacity-50"
-				>x</a
-			>
+			>x</a>
 		</div>
 	</div>
 </template>

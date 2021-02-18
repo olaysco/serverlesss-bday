@@ -1,3 +1,4 @@
+import { domain } from "@/config";
 import createAuth0Client, { Auth0Client, GetTokenSilentlyOptions, GetTokenWithPopupOptions, LogoutOptions, RedirectLoginOptions } from "@auth0/auth0-spa-js";
 
 class Auth {
@@ -7,12 +8,13 @@ class Auth {
     async getInstance(): Promise<Auth0Client> {
         if (this.instance) return this.instance 
         return this.instance = await  createAuth0Client({
-            domain: "olaysco.us.auth0.com",
+            domain: domain,
             client_id: "7OxiATtNDzxwanpb6qTdoaKZKRc4jhLo",
-            redirect_uri: `${window.location.origin}/callback`
+            redirect_uri: `${window.location.origin}/callback`,
+            audience: "https:://olaysco-bday-auth"
         })
     }
-    async getTokenSilently(o: GetTokenSilentlyOptions) {
+    async getTokenSilently(o?: GetTokenSilentlyOptions) {
         return this.getInstance().then(async instance => {
             return await instance.getTokenSilently(o);
         });

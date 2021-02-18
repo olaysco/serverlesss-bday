@@ -3,11 +3,11 @@ export default {
   events: [
     {
       httpApi: {
-        method: 'get',
-        path: '/contact',
+        method: 'delete',
+        path: '/contact/{id}',
         authorizer: {
           name: "AuthO"
-        }
+        },
       }
     }
   ],
@@ -15,7 +15,8 @@ export default {
     {
       Effect: "Allow",
       Action: [
-        "dynamodb:Query"
+        "dynamodb:GetItem",
+        "dynamodb:DeleteItem"
       ],
       Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CONTACT_TABLE}/index/${self:provider.environment.CONTACT_USER_INDEX}"
     }

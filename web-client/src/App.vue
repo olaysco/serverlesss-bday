@@ -4,7 +4,6 @@
 		<alert />
 	</div>
 </template>
-
 <script>
 import "@/assets/css/tailwind.css";
 import Alert from "./components/Alert.vue";

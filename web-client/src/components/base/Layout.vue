@@ -1,31 +1,32 @@
 <template>
 	<div class="main bg-gray-100 flex">
+		<loading></loading>
 		<div class="sidebar">
 			<div class="head w-full h-16 p-4 flex justify-center items-center">
 				<h1 class="text-white font-bold text-xl flex">
-					<svg-icon name="cake-layered" class="mr-3" /> Birthday App
+					<svg-icon name="cake-layered" class="mr-3" />Birthday App
 				</h1>
 			</div>
 			<div class="menu mt-16">
 				<ul class="menu-wrapper text-left text-white">
 					<li class="menu-item">
 						<router-link to="/app">
-							<svg-icon name="chart-bar" class="mr-3" /> Stats
+							<svg-icon name="chart-bar" class="mr-3" />Stats
 						</router-link>
 					</li>
 					<li class="menu-item">
 						<router-link to="/contacts">
-							<svg-icon name="account-group" class="mr-3" /> Contacts
+							<svg-icon name="account-group" class="mr-3" />Contacts
 						</router-link>
 					</li>
 					<li class="menu-item">
 						<router-link to="/settings">
-							<svg-icon name="cog" class="mr-3" /> Settings
+							<svg-icon name="cog" class="mr-3" />Settings
 						</router-link>
 					</li>
 					<li class="menu-item">
 						<a href="#" @click="handleLogout">
-							<svg-icon name="power-off" class="mr-3" /> Log out
+							<svg-icon name="power-off" class="mr-3" />Log out
 						</a>
 					</li>
 				</ul>
@@ -36,17 +37,23 @@
 		</div>
 	</div>
 </template>
-<script>
-import { mapActions } from "vuex";
-export default {
-	methods: {
-		...mapActions(["logout"]),
-		async handleLogout() {
-			await this.logout();
-			this.$router.push("/");
-		},
-	},
-};
+<script lang="ts">
+import { Component, Vue } from "vue-property-decorator";
+import Loading from "../Loading.vue";
+
+@Component({
+	components: { Loading },
+})
+export default class Layout extends Vue {
+	created() {
+		this.$store.dispatch("GET_CONTACT");
+	}
+
+	async handleLogout() {
+		await this.$store.dispatch("LOGOUT");
+		this.$router.push("/");
+	}
+}
 </script>
 <style lang="scss" scoped>
 .main {

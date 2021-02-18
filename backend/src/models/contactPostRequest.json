@@ -1,0 +1,24 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "contact",
+    "type": "object",
+    "contact": {
+        "type": "object",
+        "properties": {
+            "name": { "type": "string" },
+            "phoneNumber": { "type": "string" },
+            "email": { "type": "string" },
+            "title": { "type": "string" },
+            "monthOfBirth": { "type": "number" },
+            "dayOfBirth": { "type": "number" }
+        }
+    },
+    "properties": {
+        "items": {"$ref": "#contact" }
+    },
+    "required": [
+        "name",
+        "description"
+    ],
+  "additionalProperties": false
+}

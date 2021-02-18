@@ -1,18 +1,20 @@
-import schema from './schema';
-
 export default {
   handler: `${__dirname.split(process.cwd())[1].substring(1).replace(/\\/g, '/')}/handler.main`,
-  events: [
+  "events": [
     {
       httpApi: {
         method: 'post',
-        path: 'contact',
+        path: '/contact',
         authorizer: {
           name: "AuthO"
         },
-        request: {
-          schema: {
-            'application/json': schema
+        reqValidatorName: "contactBody",
+        documentation: {
+          summary: "Post contacts",
+          description: "Post contacts",
+          tags: "Contacts",
+          requestModels: {
+            "application/json": "contactPostRequest"
           }
         }
       }
@@ -20,7 +22,7 @@ export default {
   ],
   iamRoleStatements: [
     {
-      effect: "Allow",
+      Effect: "Allow",
       Action: [   
         "dynamodb:PutItem",
         "dynamodb:GetItem"

@@ -5,14 +5,18 @@ import { DocumentClient } from "aws-sdk/clients/dynamodb"
 import { createLogger } from "@libs/logger"
 
 const logger = createLogger('contactDataLAyer')
-
-const XAWS = AWSXRay.captureAWS(AWS)
+let XAWS = null
+if (process.env._X_AMZN_TRACE_ID) {
+    XAWS = AWSXRay.captureAWS(AWS)
+} else {
+    XAWS = AWS
+}
 
 export class ContactAccess {
     constructor(
         private readonly docClient: DocumentClient = createDynamoDBClient(),
         private readonly contactsTable = process.env.CONTACT_TABLE,
-        private readonly contactUserIndex = process.env.CONTACT_USER_INDEX
+        private readonly contactBdayIndex = process.env.CONTACT_BIRTHDAY_INDEX
     ) { }
 
     /**
@@ -48,14 +52,16 @@ export class ContactAccess {
                         email: contact.email,
                         title: contact.title,
                         dayOfBirth: contact.dayOfBirth,
-                        monthOfBirth: contact.monthOfbirth
+                        monthOfBirth: contact.monthOfBirth,
+                        dateOfBirth: contact.dateOfBirth,
+                        phoneNumber: contact.phoneNumber
                     }
                 }
             })
         })
         await this.docClient.batchWrite({
             RequestItems: {
-                'TABLE_NAME': params
+                [`${this.contactsTable}`]: params
             }
         }).promise()
 
@@ -76,7 +82,7 @@ export class ContactAccess {
                 userId,
                 id
             },
-            UpdateExpression: 'set #name = :name, email = :email, title = :title, monthOfBirth = :monthOfBirth, dayOfBirth = :dayOfBirth',
+            UpdateExpression: 'set #name = :name, email = :email, title = :title, monthOfBirth = :monthOfBirth, dayOfBirth = :dayOfBirth, dateOfBirth = :dateOfBirth, phoneNumber = :phoneNumber',
             ExpressionAttributeNames: {
                 "#name": "name"
             },
@@ -84,8 +90,10 @@ export class ContactAccess {
                 ":name": contact.name,
                 ":email": contact.email,
                 ":title": contact.title,
-                ":monthOfBirth": contact.monthOfbirth,
-                ":dayOfBirth": contact.dayOfBirth
+                ":monthOfBirth": contact.monthOfBirth,
+                ":dayOfBirth": contact.dayOfBirth,
+                ":dateOfBirth": contact.dateOfBirth,
+                ":phoneNumber": contact.phoneNumber
             },
             ReturnValues: "UPDATED_NEW"
         }).promise()
@@ -117,15 +125,16 @@ export class ContactAccess {
      * @returns Promise<Contact[]>
      */
     async getAllContacts(userId: string): Promise<Contact[]> {
+        logger.info(`getting all contacts ${this.contactsTable} ${userId}`)
         const result = await this.docClient.query({
             TableName: this.contactsTable,
-            IndexName: this.contactUserIndex,
+            // IndexName: this.contactUserIndex,
             KeyConditionExpression: 'userId = :userId',
             ExpressionAttributeValues: {
                 ':userId': userId
             }
         }).promise()
-
+        logger.info(result)
         return result.Items as Contact[]
     }
 
@@ -163,6 +172,26 @@ export class ContactAccess {
             }
         }).promise()
         logger.info(`end: delete todo ${id} `)
+    }
+
+    /**
+     * Asserts a contact item exists in DB
+     * 
+     * @param id string
+     * @returns Promise<boolean>
+     */
+    async monthDayCelebrants(date: string): Promise<Contact[]> {
+        logger.info(`getting all contacts ${this.contactsTable} celebrating birthday this month and day`)
+        const result = await this.docClient.query({
+            TableName: this.contactsTable,
+            IndexName: this.contactBdayIndex,
+            KeyConditionExpression: 'dateOfBirth = :dob',
+            ExpressionAttributeValues: {
+                ':dob': date
+            }
+        }).promise()
+        logger.info(result)
+        return result.Items as Contact[]
     }
 }
 

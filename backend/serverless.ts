@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
-import { postContact, updateContact, getContact } from './src/functions';
+import { postContact, updateContact, getContact, deleteContact, fetchDayCelebrants } from './src/functions';
 
 const serverlessConfiguration: AWS = {
   service: 'backend',
@@ -17,7 +17,14 @@ const serverlessConfiguration: AWS = {
           title: '${self: service.name}',
           description: 'Wishes assistant application'
         }
-      }
+      },
+      models: [
+        {
+          name: "contactPostRequest",
+          contentType: "application/json",
+          schema: "${file(src/models/contactPostRequest.json)}"
+        }
+      ]
     },
     endpoints: {
       "dynamodb-url": "http://localhost:8000"
@@ -29,7 +36,7 @@ const serverlessConfiguration: AWS = {
       stages: ['dev']
     }
   },
-  plugins: ['serverless-webpack', 'serverless-iam-roles-per-function', 'serverless-dynamodb-local', 'serverless-offline', 'serverless-aws-documentation'],
+  plugins: ['serverless-webpack', 'serverless-iam-roles-per-function', 'serverless-reqvalidator-plugin', 'serverless-aws-documentation', 'serverless-dynamodb-local', 'serverless-offline'],
   provider: {
     name: 'aws',
     runtime: 'nodejs12.x',
@@ -38,19 +45,29 @@ const serverlessConfiguration: AWS = {
       shouldStartNameWithService: true,
     },
     environment: {
+      AWS_XRAY_LOG_LEVEL: 'silent',
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       USERS_TABLE: 'Users-${self:provider.stage}',
       CONTACT_TABLE: 'Users-contact-${self:provider.stage}',
-      CONTACT_USER_INDEX: "contactUserIndex"
+      CONTACT_USER_INDEX: "contactUserIndex",
+      CONTACT_BIRTHDAY_INDEX: "contactBdayIndex"
     },
     stage: "${opt:stage, 'dev'}",
     region: 'us-west-2',
     lambdaHashingVersion: '20201221',
     httpApi: {
+      cors: {
+        allowedOrigins: ['*'],
+        allowedHeaders: ['*'],
+        allowedMethods: ['GET', 'PUT', 'POST', 'DELETE', 'HEAD', 'PATCH'],
+        maxAge: 3000,
+        exposedResponseHeaders: ['Special-Response-Header'],
+        allowCredentials: true
+      },
       authorizers: {
         AuthO: {
           identitySource: "$request.header.Authorization",
-          issuerUrl: "olaysco.us.auth0.com",
+          issuerUrl: "https://olaysco.us.auth0.com/",
           audience: [
             "https:://olaysco-bday-auth",
             "https:://olaysco-bday-auth"
@@ -59,7 +76,7 @@ const serverlessConfiguration: AWS = {
       }
     }
   },
-  functions: { postContact, getContact, updateContact },
+  functions: { postContact, getContact, updateContact, deleteContact, fetchDayCelebrants },
   resources: {
     Resources: {
       UsersDynamoDBTable: {
@@ -94,7 +111,7 @@ const serverlessConfiguration: AWS = {
               AttributeType: "S"
             },
             {
-              AttributeName: "timestamp",
+              AttributeName: "dateOfBirth",
               AttributeType: "S"
             }
           ],
@@ -110,14 +127,14 @@ const serverlessConfiguration: AWS = {
           ],
           GlobalSecondaryIndexes: [
             {
-              IndexName: "${self:provider.environment.CONTACT_USER_INDEX}",
+              IndexName: "${self:provider.environment.CONTACT_BIRTHDAY_INDEX}",
               KeySchema: [
                 {
-                  AttributeName: "userId",
+                  AttributeName: "dateOfBirth",
                   KeyType: "HASH"
                 },
                 {
-                  AttributeName: "createdAt",
+                  AttributeName: "userId",
                   KeyType: "RANGE"
                 }
               ],
@@ -130,6 +147,17 @@ const serverlessConfiguration: AWS = {
           TableName: "${self:provider.environment.CONTACT_TABLE}"
         }
       },
+      contactBody: {
+        Type: "AWS::ApiGateway::RequestValidator",
+        Properties: {
+          Name: 'contact-body',
+          RestApiId: {
+            Ref: "ApiGatewayRestApi"
+          },
+          ValidateRequestBody: true,
+          ValidateRequestParameters: false
+        }
+      }
     }
   }
 }

@@ -16,27 +16,30 @@ export interface Contact {
   name: string,
   email: string,
   title: string,
-  monthOfbirth: number,
+  monthOfBirth: number,
   dayOfBirth: number,
   createdAt: string,
-  phoneNumber: string
+  phoneNumber: string,
+  dateOfBirth: string
 }
 
 export interface ContactUpdate {
   name?: string,
   email?: string,
   title?: string,
-  monthOfbirth?: number,
+  monthOfBirth?: number,
   dayOfBirth?: number,
-  phoneNumber?: string
+  phoneNumber?: string,
+  dateOfBirth?: string
 }
 
 export interface ContactRequest {
     name: string,
     email: string,
     title: string,
-    monthOfbirth: number,
+    monthOfBirth: number,
     dayOfBirth: number,
+    dateOfBirth: string,
     phoneNumber: string
 }
 
@@ -44,8 +47,9 @@ export interface ContactUpdateRequest {
   name?: string,
   email?: string,
   title?: string,
-  monthOfbirth?: number,
+  monthOfBirth?: number,
   dayOfBirth?: number,
+  dateOfBirth: string,
   phoneNumber?: string
 }
 

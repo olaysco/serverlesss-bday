@@ -1,3 +1,5 @@
 export { default as getContact } from './getContacts'
 export {default as updateContact} from './updateContact'
-export {default as postContact } from './postContacts'
+export { default as postContact } from './postContacts'
+export { default as deleteContact } from './deleteContacts'
+export { default as fetchDayCelebrants } from './fetchDayCelebrants'
