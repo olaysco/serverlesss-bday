@@ -2,17 +2,37 @@ import 'source-map-support/register';
 
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
-import { monthDayCelebrants } from 'src/service/contact';
+import { addUserToContact, monthDayCelebrants } from 'src/service/contact';
+import { getUsers } from 'src/service/user';
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
+import CelebrantQueue from "../../service/queue";
+import { createLogger } from '@libs/logger';
+import { Contact } from 'src/types';
+
+const logger = createLogger('fetchDayCelebrants')
+
+let celebrantQueue = new CelebrantQueue()
 
 const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
   const date = new Date()
   console.log(date.getMonth() + 1, date.getDate(), date.toISOString())
-  const contacts = await monthDayCelebrants(date.getMonth() + 1, date.getDate())
+  let contacts = await monthDayCelebrants(date.getMonth() + 1, date.getDate())
+  if (contacts.length > 0) {
+    contacts = await addUserToContact(contacts)
+    await celebrantQueue.pushCelebrantsToQueue(contacts)
+    return formatJSONResponse({
+      message: `contact successfully retrieved`,
+      contacts
+    });
+  }
+
   return formatJSONResponse({
-    message: `contact successfully retrieved`,
-    contacts,
+    message: `no celebrants today`,
+    contacts
   });
+  
 }
+
+
 
 export const main = middyfy(handler);

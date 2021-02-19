@@ -20,7 +20,8 @@ export interface Contact {
   dayOfBirth: number,
   createdAt: string,
   phoneNumber: string,
-  dateOfBirth: string
+  dateOfBirth: string,
+  [key: string]: any
 }
 
 export interface ContactUpdate {
@@ -51,5 +52,15 @@ export interface ContactUpdateRequest {
   dayOfBirth?: number,
   dateOfBirth: string,
   phoneNumber?: string
+}
+
+export interface User {
+  id: string,
+  messages?: []
+}
+
+export interface UserUpdate {
+  messages?: []
+  cardUrl?: string
 }
 

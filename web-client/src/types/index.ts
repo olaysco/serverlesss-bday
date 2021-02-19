@@ -19,6 +19,8 @@ export interface User {
     address?: string;
     updated_at?: string;
     sub?: string;
+    messages?: Array<any>;
+    cardUrl?: string;
     [key: string]: any;
 }
 

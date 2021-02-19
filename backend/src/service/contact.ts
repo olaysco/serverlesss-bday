@@ -4,6 +4,7 @@ import { v4 as uuidV4 } from 'uuid'
 import { ContactAccess } from '../dataLayer/contactAccess'
 import { Contact, ContactRequest, ContactUpdateRequest } from '../types'
 import { HTTPException } from '@libs/exception'
+import { getUsers } from './user'
 
 const access = new ContactAccess()
 const logger = createLogger('contactService')
@@ -80,4 +81,19 @@ const validateContact = (userId: string, item: any) => {
     return true
 }
 
-export {createContact, getContacts, updateContact, deleteContact, createManyContact, monthDayCelebrants}
+
+const addUserToContact = async (contacts: Contact[]): Promise<Contact[]> => {
+    const userIds = new Set();
+    contacts.forEach((contact) => {
+      userIds.add(contact.userId);
+    })
+    const users = await getUsers(Array.from(userIds) as string[])
+    const newContacts: Contact[] = contacts.map(contact => {
+      contact.user = users.filter(user => user.id == contact.userId)[0] ?? {}
+      return contact
+    })
+    logger.info(`users info retrieved ${userIds}`)
+    return newContacts
+}
+
+export {createContact, getContacts, updateContact, deleteContact, createManyContact, monthDayCelebrants, addUserToContact}

@@ -1,5 +1,5 @@
 import { API_URL } from "@/config";
-import { Contact } from "@/types";
+import { Contact, User } from "@/types";
 import axios from "axios";
 import auth from "./auth";
 
@@ -48,12 +48,44 @@ class ContactApi {
     }
 
     async updateContact(contact: Contact) {
-        console.log(contact)
         await axios.put(`${API_URL}/contact/${contact.id}`, contact, {
             headers: {
                 Authorization: `Bearer ${this.token}`
             }
         })
+    }
+
+    async userInfo() {
+        this.token = await auth.getTokenSilently()
+        const response = await axios.get(`${API_URL}/user`, {
+            headers: {
+                Authorization: `Bearer ${this.token}`
+            }
+        })
+        return response.data.user
+    }
+
+    async updateUser(user: User) {
+        await axios.put(`${API_URL}/user`, user, {
+            headers: {
+                Authorization: `Bearer ${this.token}`
+            }
+        })
+    }
+
+    async getUploadUrl() {
+        const response = await axios.post(`${API_URL}/user/images`, {}, {
+            headers: {
+                Authorization: `Bearer ${this.token}`
+            }
+        })
+        console.log(response)
+        return response.data
+    }
+
+    async uploadFile(file: any): Promise<void> {
+        const url = await this.getUploadUrl();
+        // await axios.put(url, file)
     }
 
     currentMonthName() {

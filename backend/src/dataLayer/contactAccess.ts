@@ -134,7 +134,6 @@ export class ContactAccess {
                 ':userId': userId
             }
         }).promise()
-        logger.info(result)
         return result.Items as Contact[]
     }
 
@@ -190,7 +189,6 @@ export class ContactAccess {
                 ':dob': date
             }
         }).promise()
-        logger.info(result)
         return result.Items as Contact[]
     }
 }

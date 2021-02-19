@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
-import { postContact, updateContact, getContact, deleteContact, fetchDayCelebrants } from './src/functions';
+import { postContact, updateContact, getContact, deleteContact, fetchDayCelebrants, getUser, updateUser, sendEmail, postUserImage } from './src/functions';
 
 const serverlessConfiguration: AWS = {
   service: 'backend',
@@ -34,9 +34,23 @@ const serverlessConfiguration: AWS = {
         migrate: true
       },
       stages: ['dev']
+    },
+    "serverless-offline-sqs": {
+      autoCreate: true,
+      endpoint: "http://localhost:9324",
+      region: "eu-west-2",
+      accessKeyId: "root",
+      secretAccessKey: "root",
+      skipCacheInvalidation: false
+    },
+    s3: {
+      host: "localhost",
+      port: "8200",
+      directory: "/tmp"
     }
+    
   },
-  plugins: ['serverless-webpack', 'serverless-iam-roles-per-function', 'serverless-reqvalidator-plugin', 'serverless-aws-documentation', 'serverless-dynamodb-local', 'serverless-offline'],
+  plugins: ['serverless-webpack', 'serverless-iam-roles-per-function', 'serverless-reqvalidator-plugin', 'serverless-aws-documentation', 'serverless-dynamodb-local', 'serverless-s3-local', 'serverless-offline', 'serverless-offline-sqs'],
   provider: {
     name: 'aws',
     runtime: 'nodejs12.x',
@@ -50,7 +64,10 @@ const serverlessConfiguration: AWS = {
       USERS_TABLE: 'Users-${self:provider.stage}',
       CONTACT_TABLE: 'Users-contact-${self:provider.stage}',
       CONTACT_USER_INDEX: "contactUserIndex",
-      CONTACT_BIRTHDAY_INDEX: "contactBdayIndex"
+      CONTACT_BIRTHDAY_INDEX: "contactBdayIndex",
+      CELEBRANT_QUEUE: "celebrantQueue",
+      CARD_S3_BUCKET: "BirthdayCardBucket",
+      SIGNED_URL_EXPIRATION: "300"
     },
     stage: "${opt:stage, 'dev'}",
     region: 'us-west-2',
@@ -76,7 +93,7 @@ const serverlessConfiguration: AWS = {
       }
     }
   },
-  functions: { postContact, getContact, updateContact, deleteContact, fetchDayCelebrants },
+  functions: { postContact, getContact, updateContact, deleteContact, fetchDayCelebrants, getUser, updateUser, sendEmail, postUserImage },
   resources: {
     Resources: {
       UsersDynamoDBTable: {
@@ -156,6 +173,49 @@ const serverlessConfiguration: AWS = {
           },
           ValidateRequestBody: true,
           ValidateRequestParameters: false
+        }
+      },
+      celebrantQueue: {
+        Type: "AWS::SQS::Queue",
+        Properties: {
+          QueueName: "${self:provider.environment.CELEBRANT_QUEUE}"
+        }
+      },
+      CardBucket: {
+        Type: "AWS::S3::Bucket",
+        Properties: {
+          BucketName: "${self:provider.environment.CARD_S3_BUCKET}",
+          CorsConfiguration: {
+            CorsRules: [
+                {
+                  AllowedOrigins: ['*'],
+                  AllowedHeaders: ['*'],
+                  AllowedMethods: ['GET', 'PUT', 'POST', 'DELETE', 'HEAD'],
+                  MaxAge: 3000
+                }
+              ]
+            }
+        }
+      },
+      BucketPolicy: {
+        Type: "AWS::S3::BucketPolicy",
+        Properties: {
+          PolicyDocument: {
+            Id: "MyPolicy",
+            Version: "2012-10-17",
+            Statement: [
+              {
+                Sid: "PublicReadForGetBucketObjects",
+                Effect: "Allow",
+                Principal: "*",
+                Action: "s3:GetObject",
+                Resource: "arn:aws:s3:::${self:provider.environment.CARD_S3_BUCKET}/*"
+              }
+            ]
+          },
+          Bucket: {
+            Ref: "CardBucket"
+          }
         }
       }
     }

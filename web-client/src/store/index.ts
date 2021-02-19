@@ -22,7 +22,7 @@ export default new vuex.Store({
             type: "error",
             message: "An unexpected error occurred"
         },
-        user: {},
+        user: { },
         authLoading: <boolean>false,
         isAuthenticated: <boolean>false,
         contact: <any>[],
@@ -106,21 +106,57 @@ export default new vuex.Store({
                 commit('SET_BUSY', true)
                 await contactApi.deleteContact(contact)
                 commit('toggleAlert', {visible: true, type: "success", title: "Success", message: "Contact successfully added"})
-                commit('SET_BUSY', false)
                 dispatch('GET_CONTACT')
             } catch (e) {
                  commit('toggleAlert', {visible: true, type: "error", title: "Error", message: "An error occurred"})
+            } finally {
+                commit('SET_BUSY', false)
             }
         },
         async UPDATE_CONTACT({ commit, dispatch }, contact: Contact) {
             try {
                 commit('SET_BUSY', true)
                 await contactApi.updateContact(contact)
-                commit('toggleAlert', {visible: true, type: "success", title: "Success", message: "Contact updated added"})
-                commit('SET_BUSY', false)
+                commit('toggleAlert', {visible: true, type: "success", title: "Success", message: "Contact updated"})
                 dispatch('GET_CONTACT')
             } catch (e) {
                  commit('toggleAlert', {visible: true, type: "error", title: "Error", message: "An error occurred"})
+            } finally {
+                commit('SET_BUSY', false)
+            }
+        },
+        async GET_USER({ commit }) {
+            try {
+                commit('SET_BUSY', true)
+                const user = await contactApi.userInfo()
+                commit('SET_USER', user)
+            } catch (e) {
+                console.log(e);
+            } finally {
+                commit('SET_BUSY', false)
+            }
+        },
+        async UPDATE_USER({ commit }, user) {
+            try {
+                commit('SET_BUSY', true)
+                await contactApi.updateUser(user)
+                commit('toggleAlert', {visible: true, type: "success", title: "Success", message: "Message updated"})
+            } catch (e) {
+                commit('toggleAlert', {visible: true, type: "error", title: "Error", message: "An error occurred"})
+            } finally {
+                commit('SET_BUSY', false)
+            }
+        },
+        async UPLOAD_IMAGE({ commit, dispatch }, file: any) {
+            try {
+                commit('SET_BUSY', true)
+                await contactApi.uploadFile(file)
+                commit('toggleAlert', { visible: true, type: "success", title: "Success", message: "Card uploaded successfully" })
+                dispatch("GET_USER")
+            } catch (e) {
+                commit('toggleAlert', {visible: true, type: "error", title: "Error", message: "An error occurred"})
+            } finally {
+                commit('SET_BUSY', false)
             }
         }
     },

@@ -14,6 +14,7 @@
     "serverless-dynamodb-local": "^0.2.39",
     "serverless-iam-roles-per-function": "^3.1.0",
     "serverless-offline": "^6.8.0",
+    "serverless-offline-sqs": "^4.1.1",
     "serverless-reqvalidator-plugin": "^1.0.4",
     "source-map-support": "^0.5.19"
   },
@@ -24,6 +25,7 @@
     "fork-ts-checker-webpack-plugin": "^6.0.0",
     "json-schema-to-ts": "^1.4.1",
     "serverless": "^2.16.0",
+    "serverless-s3-local": "^0.6.7",
     "serverless-webpack": "^5.2.0",
     "ts-loader": "^8.0.10",
     "ts-node": "^9.0.0",
