@@ -1,0 +1,120 @@
+{
+	"info": {
+		"_postman_id": "618f4966-7466-4499-8db5-629f5252ee31",
+		"name": "Bday app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET contacts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Contacts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE Contact",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET user information",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT user information",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST User Image",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			},
+			{
+				"key": "password",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://localhost:3000/"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlRFekN6c1hYUUZDbGdFeE1wbzdxOCJ9.eyJpc3MiOiJodHRwczovL29sYXlzY28udXMuYXV0aDAuY29tLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTA4NzU1MDY4NjEyOTQ4NDkzNDIwIiwiYXVkIjpbImh0dHBzOjovL29sYXlzY28tYmRheS1hdXRoIiwiaHR0cHM6Ly9vbGF5c2NvLnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2MTM2MjU0NDUsImV4cCI6MTYxMzcxMTg0NSwiYXpwIjoiN094aUFUdE5Eenh3YW5wYjZxVGRvYUtaS1JjNGpoTG8iLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIn0.FhUApAxlGP4dTkZifZPdHRpVdkNbbxUDO5-XL-CnTCWGugxZ1hYbjJ2lfrXyxgfVqlquyK89ueRhHQgt7Xq-H5877Hx_kUHIvxV0rudJQbaH9k3RGcPIvclbVizUNtuXe5mxJfJr0Lb6khFUJE98nYib0y0ROVR6_pK3F-8i_uPp9yE1sYEitaaCRCqK9DfQmScZ7VgxejOKfMVXDIj6bbi7WAQtzFUUUvSIaYv1JRkQcJkThEV0gVrixKeAgNh11ujS-2dnChzSyG1klpRvj7EQtQGirUk3euckMm24JCtJttZNcGGPoULavyN3aOoXQ2TbZ1nxJv4Y-8uoaNhh5g"
+		}
+	]
+}
