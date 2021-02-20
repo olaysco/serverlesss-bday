@@ -1,7 +1,10 @@
 ### Serverless BDAY APP
-**A simple serverless APP TO send scheduled birthday messages to their contacts**
+**A simple serverless APP TO send scheduled birthday messages to their contacts, view demo [here](https://d3h7u37ism7dxj.cloudfront.net/)**
 
 ---
+## Screenshots
+![Screenshoot 1](http://bday-app-website.s3-website-us-west-2.amazonaws.com/img/bdayapp.878405fe.png)
+![Screenshoot 2](http://bday-app-website.s3-website-us-west-2.amazonaws.com/img/bdaycardpage.PNG)
 
 ## Tech Stack (Backend)
 - AWS Lambda
@@ -23,19 +26,19 @@
 - Auth0
 
 ## Functionality
-- [x] **Authentication (Sign up and sing in)
-- [x] **App user can logout
-- [x] **App user can Create new contact
-- [x] **App user can Get her created contacts
-- [x] **App user can Update or Delete her contacts
-- [x] **App user can see celebrants for the month
-- [x] **App user can update personal birthday message to be sent to celebrants
-- [x] **App user can upload birthday card as an image to be sent to celebrants
-- [ ] **Birthday messages are sent to users on birthday
-- [ ] **App user can have multiple birthday messages
-- [ ] **App user can segment contact into different group
-- [ ] **App user can credit wallet
-- [ ] **App user can use credit in wallet to schedule gift cards or delivery of packages to contact on birthday
+- [x] Authentication (Sign up and sing in)
+- [x] App user can logout
+- [x] App user can Create new contact
+- [x] App user can Get her created contacts
+- [x] App user can Update or Delete her contacts
+- [x] App user can see celebrants for the month
+- [x] App user can update personal birthday message to be sent to celebrants
+- [x] App user can upload birthday card as an image to be sent to celebrants
+- [ ] Birthday messages are sent to users on birthday
+- [ ] App user can have multiple birthday messages
+- [ ] App user can segment contact into different group
+- [ ] App user can credit wallet
+- [ ] App user can use credit in wallet to schedule gift cards or delivery of packages to contact on birthday
 
 ## Prerequisites
 
