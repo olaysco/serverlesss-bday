@@ -11,11 +11,12 @@ const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
 
     const attachmentId = uuidV4()
     try {
-        const cardUrl = await storage.signUrl(attachmentId)
-        await updateUserCard(getUserId(event), {cardUrl: cardUrl})
+        const signedUrl = await storage.signUrl(attachmentId)
+        const cardUrl = await storage.getUrl(attachmentId)
+        await updateUserCard(getUserId(event), {cardUrl})
         return formatJSONResponse({
             message: `user successfully retrieved`,
-            cardUrl,
+            signedUrl,
         });
     } catch (e) {
         console.log(e)
