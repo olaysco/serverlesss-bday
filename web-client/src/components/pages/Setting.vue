@@ -52,7 +52,9 @@ export default {
 	},
 
 	created() {
-		this.$store.dispatch("GET_USER");
+		if (!this.$store.state.userFetched) {
+			this.$store.dispatch("GET_USER");
+		}
 	},
 };
 </script>

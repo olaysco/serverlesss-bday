@@ -26,7 +26,9 @@ export default new vuex.Store({
         authLoading: <boolean>false,
         isAuthenticated: <boolean>false,
         contact: <any>[],
-        busy: <boolean>false
+        busy: <boolean>false,
+        contactFetched: <boolean>false,
+        userFetched: <boolean>false
     },
     mutations: {
         RESTORE_MUTATION: vuexPersist.RESTORE_MUTATION, // this mutation **MUST** be named "RESTORE_MUTATION"
@@ -65,6 +67,12 @@ export default new vuex.Store({
         },
         SET_BUSY(state, payload: boolean) {
             state.busy = payload
+        },
+        SET_CONTACT_FETCHED(state, payload: boolean) {
+            state.contactFetched = payload
+        },
+        SET_USER_FETCHED(state, payload: boolean) {
+            state.userFetched = payload
         }
     },
     actions: {
@@ -88,6 +96,7 @@ export default new vuex.Store({
             commit('SET_BUSY', true)
             const contact = await contactApi.getContact()
             commit('SET_CONTACT', contact)
+            commit('SET_CONTACT_FETCHED', true)
             commit('SET_BUSY', false)
         },
         async POST_CONTACT({ commit, dispatch }, contact: Contact[]) {
@@ -130,6 +139,7 @@ export default new vuex.Store({
                 commit('SET_BUSY', true)
                 const user = await contactApi.userInfo()
                 commit('SET_USER', user)
+                commit('SET_USER_FETCHED', true)
             } catch (e) {
                 console.log(e);
             } finally {

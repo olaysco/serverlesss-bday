@@ -66,7 +66,7 @@
 							</div>
 							<div class="flex flex-col flex-grow ml-4">
 								<div class="text-sm text-gray-500">{{ month }}'s celebrants</div>
-								<div class="font-bold text-lg">3</div>
+								<div class="font-bold text-lg">{{monthCelebrant.length}}</div>
 							</div>
 						</div>
 					</div>
@@ -79,8 +79,10 @@
 	</layout>
 </template>
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Watch, Vue } from "vue-property-decorator";
 import { mapState } from "vuex";
+// eslint-disable-next-line no-unused-vars
+import { Contact } from "../../types";
 import Layout from "../base/Layout.vue";
 import MonthCelebrant from "../MonthCelebrant.vue";
 import SvgIcon from "../SvgIcon.vue";
@@ -91,6 +93,16 @@ import SvgIcon from "../SvgIcon.vue";
 })
 export default class App extends Vue {
 	public user!: any;
+	public contact!: Contact[];
+	public monthCelebrant: Contact[] = [];
+
+	@Watch("contact", { immediate: true })
+	onContactChanged() {
+		const currentMonth: number = new Date().getMonth() + 1;
+		this.monthCelebrant = this.contact.filter((info: Contact) => {
+			return (info.monthOfBirth = currentMonth);
+		});
+	}
 
 	get month() {
 		return new Date().toLocaleString("default", { month: "long" });

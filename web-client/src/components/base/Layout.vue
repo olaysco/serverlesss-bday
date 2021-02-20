@@ -46,7 +46,9 @@ import Loading from "../Loading.vue";
 })
 export default class Layout extends Vue {
 	created() {
-		this.$store.dispatch("GET_CONTACT");
+		if (!this.$store.state.contactFetched) {
+			this.$store.dispatch("GET_CONTACT");
+		}
 	}
 
 	async handleLogout() {
