@@ -49,11 +49,11 @@
 								@click="login()"
 								class="font-medium text-blue-700 hover:text-blue-700"
 							>Log in</button>
-							<button
+							<router-link
 								v-if="!authLoading && isAuthenticated"
-								@click="logout()"
+								to="/app"
 								class="font-medium text-blue-700 hover:text-blue-700"
-							>Log out</button>
+							>Profile</router-link>
 						</div>
 					</nav>
 				</div>
@@ -125,12 +125,12 @@
 										class="block w-full px-5 py-3 text-center font-medium text-blue-700 bg-gray-50 hover:bg-gray-100"
 										role="menuitem"
 									>Log in</button>
-									<button
+									<router-link
 										v-if="!authLoading && isAuthenticated"
-										@click="logout()"
+										to="/app"
 										class="block w-full px-5 py-3 text-center font-medium text-blue-700 bg-gray-50 hover:bg-gray-100"
 										role="menuitem"
-									>Log out</button>
+									>Profile</router-link>
 								</div>
 							</div>
 						</div>

@@ -84,8 +84,9 @@ class ContactApi {
     }
 
     async uploadFile(file: any): Promise<void> {
-        const url = await this.getUploadUrl();
-        // await axios.put(url, file)
+        const { signedUrl } = await this.getUploadUrl();
+        console.log(signedUrl)
+        await axios.put(signedUrl, file)
     }
 
     currentMonthName() {

@@ -4,7 +4,9 @@
 		<div class="sidebar">
 			<div class="head w-full h-16 p-4 flex justify-center items-center">
 				<h1 class="text-white font-bold text-xl flex">
-					<svg-icon name="cake-layered" class="mr-3" />Birthday App
+					<a href="/" class="flex">
+						<svg-icon name="cake-layered" class="mr-3" />Birthday App
+					</a>
 				</h1>
 			</div>
 			<div class="menu mt-16">

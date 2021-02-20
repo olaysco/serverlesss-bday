@@ -48,8 +48,9 @@ export default class BirthDayMessage extends Vue {
 	}
 
 	filesChange(fileList: any) {
-		this.file = fileList;
-		console.log(fileList);
+		if (!fileList) return;
+		this.file = fileList[0];
+		console.log(this.file);
 	}
 }
 </script>
