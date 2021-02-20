@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
-import { postContact, updateContact, getContact, deleteContact, fetchDayCelebrants, getUser, updateUser, sendEmail, postUserImage } from './src/functions';
+import { postContact, updateContact, getContact, deleteContact, fetchDayCelebrants, getUser, updateUser, sendEmail, postUserImage, authorizer } from './src/functions';
 
 const serverlessConfiguration: AWS = {
   service: 'backend',
@@ -50,7 +50,7 @@ const serverlessConfiguration: AWS = {
     }
     
   },
-  plugins: ['serverless-webpack', 'serverless-iam-roles-per-function', 'serverless-reqvalidator-plugin', 'serverless-aws-documentation', 'serverless-dynamodb-local', 'serverless-s3-local', 'serverless-offline', 'serverless-offline-sqs'],
+  plugins: ['serverless-webpack', 'serverless-iam-roles-per-function', 'serverless-aws-documentation', 'serverless-dynamodb-local', 'serverless-s3-local', 'serverless-offline', 'serverless-offline-sqs'],
   provider: {
     name: 'aws',
     runtime: 'nodejs12.x',
@@ -66,34 +66,39 @@ const serverlessConfiguration: AWS = {
       CONTACT_USER_INDEX: "contactUserIndex",
       CONTACT_BIRTHDAY_INDEX: "contactBdayIndex",
       CELEBRANT_QUEUE: "celebrantQueue",
-      CARD_S3_BUCKET: "BirthdayCardBucket",
-      SIGNED_URL_EXPIRATION: "300"
+      CARD_S3_BUCKET: "birthday-card-bucket-${self:provider.stage}",
+      SIGNED_URL_EXPIRATION: "300",
+      AUTH0_JWKS_URL: "https://olaysco.us.auth0.com/.well-known/jwks.json"
     },
     stage: "${opt:stage, 'dev'}",
     region: 'us-west-2',
     lambdaHashingVersion: '20201221',
-    httpApi: {
-      cors: {
-        allowedOrigins: ['*'],
-        allowedHeaders: ['*'],
-        allowedMethods: ['GET', 'PUT', 'POST', 'DELETE', 'HEAD', 'PATCH'],
-        maxAge: 3000,
-        exposedResponseHeaders: ['Special-Response-Header'],
-        allowCredentials: true
-      },
-      authorizers: {
-        AuthO: {
-          identitySource: "$request.header.Authorization",
-          issuerUrl: "https://olaysco.us.auth0.com/",
-          audience: [
-            "https:://olaysco-bday-auth",
-            "https:://olaysco-bday-auth"
-          ]
-        } 
-      }
+    // httpApi: {
+    //   cors: {
+    //     allowedOrigins: ['*'],
+    //     allowedHeaders: ['*'],
+    //     allowedMethods: ['GET', 'PUT', 'POST', 'DELETE', 'HEAD', 'PATCH'],
+    //     maxAge: 3000,
+    //     exposedResponseHeaders: ['Special-Response-Header'],
+    //     allowCredentials: true
+    //   },
+    //   authorizers: {
+    //     AuthO: {
+    //       identitySource: "$request.header.Authorization",
+    //       issuerUrl: "https://olaysco.us.auth0.com/",
+    //       audience: [
+    //         "https:://olaysco-bday-auth",
+    //         "https:://olaysco-bday-auth"
+    //       ]
+    //     } 
+    //   }
+    // },
+    tracing: {
+      lambda: true,
+      apiGateway: true
     }
   },
-  functions: { postContact, getContact, updateContact, deleteContact, fetchDayCelebrants, getUser, updateUser, sendEmail, postUserImage },
+  functions: {  authorizer, postContact, getContact, updateContact, deleteContact, fetchDayCelebrants, getUser, updateUser, sendEmail, postUserImage },
   resources: {
     Resources: {
       UsersDynamoDBTable: {
@@ -217,7 +222,20 @@ const serverlessConfiguration: AWS = {
             Ref: "CardBucket"
           }
         }
-      }
+      },
+      GatewayResponseDefault4XX: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+            "gatewayresponse.header.Access-Control-Allow-Headers": "'*'",
+          },
+          "ResponseType": "DEFAULT_4XX",
+          RestApiId: {
+            Ref: "ApiGatewayRestApi"
+          }
+        }
+      }    
     }
   }
 }

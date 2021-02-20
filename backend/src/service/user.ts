@@ -1,5 +1,4 @@
 import { createLogger } from '@libs/logger'
-import 'source-map-support/register'
 import { UserAccess } from '../dataLayer/userAccess'
 import { User, UserUpdate } from '../types'
 

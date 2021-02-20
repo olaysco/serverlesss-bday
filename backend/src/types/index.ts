@@ -1,3 +1,5 @@
+import { JwtHeader } from 'jsonwebtoken'
+
 export interface error {
     message: string
     code?: number
@@ -50,7 +52,7 @@ export interface ContactUpdateRequest {
   title?: string,
   monthOfBirth?: number,
   dayOfBirth?: number,
-  dateOfBirth: string,
+  dateOfBirth?: string,
   phoneNumber?: string
 }
 
@@ -64,3 +66,14 @@ export interface UserUpdate {
   cardUrl?: string
 }
 
+export interface JwtPayload {
+  iss: string
+  sub: string
+  iat: number
+  exp: number
+}
+
+export interface Jwt {
+  header: JwtHeader
+  payload: JwtPayload
+}

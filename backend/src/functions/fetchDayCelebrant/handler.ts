@@ -1,13 +1,9 @@
-import 'source-map-support/register';
-
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import { addUserToContact, monthDayCelebrants } from 'src/service/contact';
-import { getUsers } from 'src/service/user';
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 import CelebrantQueue from "../../service/queue";
 import { createLogger } from '@libs/logger';
-import { Contact } from 'src/types';
 
 const logger = createLogger('fetchDayCelebrants')
 

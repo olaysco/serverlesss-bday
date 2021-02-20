@@ -2,12 +2,11 @@ export default {
   handler: `${__dirname.split(process.cwd())[1].substring(1).replace(/\\/g, '/')}/handler.main`,
   events: [
     {
-      httpApi: {
+      http: {
         method: 'delete',
         path: '/contact/{id}',
-        authorizer: {
-          name: "AuthO"
-        },
+        authorizer: "authorizer",
+        cors: true
       }
     }
   ],

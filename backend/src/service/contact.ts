@@ -1,5 +1,4 @@
 import { createLogger } from '@libs/logger'
-import 'source-map-support/register'
 import { v4 as uuidV4 } from 'uuid'
 import { ContactAccess } from '../dataLayer/contactAccess'
 import { Contact, ContactRequest, ContactUpdateRequest } from '../types'

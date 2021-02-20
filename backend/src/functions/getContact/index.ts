@@ -2,12 +2,11 @@ export default {
   handler: `${__dirname.split(process.cwd())[1].substring(1).replace(/\\/g, '/')}/handler.main`,
   events: [
     {
-      httpApi: {
+      http: {
         method: 'get',
         path: '/contact',
-        authorizer: {
-          name: "AuthO"
-        }
+        authorizer: "authorizer",
+        cors: true
       }
     }
   ],
@@ -17,7 +16,7 @@ export default {
       Action: [
         "dynamodb:Query"
       ],
-      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CONTACT_TABLE}/index/${self:provider.environment.CONTACT_USER_INDEX}"
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CONTACT_TABLE}"
     }
   ]
 }

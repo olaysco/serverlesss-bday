@@ -22,6 +22,14 @@ export default {
           "sqs:ReceiveMessage"
       ],
       Resource: "arn:aws:sqs:${self:provider.region}:*:*"
+    },
+    {
+      Effect: "Allow",
+      Action: [
+        "dynamodb:GetItem",
+        "dynamodb:PutItem"
+      ],
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_TABLE}"
     }
   ]
 }

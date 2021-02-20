@@ -25,6 +25,13 @@ export default {
           "sqs:SendMessage"
       ],
       Resource: "arn:aws:sqs:${self:provider.region}:*:*"
+    },
+    {
+      Effect: "Allow",
+      Action: [
+        "dynamodb:BatchGetItem"
+      ],
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.USERS_TABLE}"
     }
   ]
 }

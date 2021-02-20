@@ -1,5 +1,3 @@
-import 'source-map-support/register';
-
 import { formatJSONResponse } from '@libs/apiGateway';
 import { getUserId, middyfy } from '@libs/lambda';
 import { v4 as uuidV4 } from 'uuid'

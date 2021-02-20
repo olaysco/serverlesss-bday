@@ -9,19 +9,24 @@
   "dependencies": {
     "@middy/core": "^1.5.0",
     "@middy/http-json-body-parser": "^1.5.0",
-    "aws-xray-sdk": "^3.2.0",
+    "aws-xray-sdk": "^2.3.3",
+    "axios": "^0.21.1",
+    "jsonwebtoken": "^8.5.1",
     "serverless-aws-documentation": "^1.1.0",
     "serverless-dynamodb-local": "^0.2.39",
     "serverless-iam-roles-per-function": "^3.1.0",
     "serverless-offline": "^6.8.0",
     "serverless-offline-sqs": "^4.1.1",
     "serverless-reqvalidator-plugin": "^1.0.4",
-    "source-map-support": "^0.5.19"
+    "source-map-support": "^0.5.19",
+    "winston": "^3.2.1",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@serverless/typescript": "^2.16.0",
-    "@types/aws-lambda": "^8.10.64",
+    "@types/aws-lambda": "^8.10.17",
     "@types/node": "^14.14.6",
+    "aws-sdk": "^2.433.0",
     "fork-ts-checker-webpack-plugin": "^6.0.0",
     "json-schema-to-ts": "^1.4.1",
     "serverless": "^2.16.0",

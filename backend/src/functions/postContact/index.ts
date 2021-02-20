@@ -2,19 +2,19 @@ export default {
   handler: `${__dirname.split(process.cwd())[1].substring(1).replace(/\\/g, '/')}/handler.main`,
   "events": [
     {
-      httpApi: {
+      http: {
         method: 'post',
         path: '/contact',
-        authorizer: {
-          name: "AuthO"
-        },
-        reqValidatorName: "contactBody",
+        authorizer: "authorizer",
+        cors: true,
         documentation: {
           summary: "Post contacts",
           description: "Post contacts",
           tags: "Contacts",
-          requestModels: {
-            "application/json": "contactPostRequest"
+          request: {
+            schema: {
+              "application/json": "contactPostRequest"
+            }
           }
         }
       }
@@ -25,9 +25,10 @@ export default {
       Effect: "Allow",
       Action: [   
         "dynamodb:PutItem",
-        "dynamodb:GetItem"
+        "dynamodb:GetItem",
+        "dynamodb:BatchWriteItem"
       ],
-      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CONTACT_TABLE}/index/${self:provider.environment.CONTACT_USER_INDEX}"
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CONTACT_TABLE}"
     }
   ]
 }

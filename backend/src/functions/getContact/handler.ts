@@ -1,5 +1,3 @@
-import 'source-map-support/register';
-
 import { formatJSONResponse } from '@libs/apiGateway';
 import { getUserId, middyfy } from '@libs/lambda';
 import { getContacts } from 'src/service/contact';

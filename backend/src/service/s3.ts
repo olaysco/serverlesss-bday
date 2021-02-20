@@ -1,4 +1,3 @@
-import 'source-map-support/register'
 import * as AWS from 'aws-sdk'
 import { createLogger } from '@libs/logger'
 
