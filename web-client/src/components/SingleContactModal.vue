@@ -19,7 +19,7 @@
 					<label
 						class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
 						for="email"
-					>Full Name</label>
+					>Email</label>
 					<input
 						class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-red rounded py-3 px-4 mb-3"
 						id="email"
@@ -174,6 +174,7 @@ export default class SingleContactModal extends Vue {
 			return;
 		}
 		if (!this.shouldUpdate) {
+            console.log([this.contact])
 			this.$store.dispatch("POST_CONTACT", [this.contact]);
 		} else {
 			this.$store.dispatch("UPDATE_CONTACT", this.contact);
