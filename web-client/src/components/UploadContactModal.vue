@@ -36,11 +36,11 @@
 							v-if="!filename"
 							class="mb-3 font-semibold text-gray-900 flex flex-wrap justify-center"
 						>
-							<span>Drag and drop your</span>&nbsp;<span
-								>files anywhere or</span
+							<span>Drag and drop your files anywhere or</span
 							>
 						</p>
 						<p
+                            v-else
 							class="mb-3 font-semibold text-gray-900 flex flex-wrap justify-center"
 						>
 							<span>{{ filename }}</span>
@@ -68,8 +68,8 @@
 							class="h-full w-full text-center flex flex-col justify-center items-center"
 						>
 							<img
-								class="mx-auto w-32"
-								src="https://user-images.githubusercontent.com/507615/54591670-ac0a0180-4a65-11e9-846c-e55ffce0fe7b.png"
+								class="mx-auto w-16"
+								src="../assets/images/empty-tray.png"
 								alt="no data"
 							/>
 							<span class="text-small text-gray-500">No file selected</span>
@@ -114,8 +114,9 @@
 			</button>
 			<button
 				class="focus:outline-none px-4 bg-blue-700 p-2 ml-3 rounded-lg text-white hover:bg-blue-400 text-sm"
+                @click="uploadContact"
 			>
-				Confirm
+				Upload
 			</button>
 		</div>
 	</base-modal>
@@ -175,6 +176,8 @@ export default {
 				});
 			}
 			this.filename = file.name;
+            this.data = null;
+            console.log('file added')
 			Papa.parse(file, {
 				header: true,
 				skipEmptyLines: true,
@@ -183,6 +186,35 @@ export default {
 				},
 			});
 		},
+        async uploadContact() {
+            try {
+                this.$store.commit('SET_BUSY', true)
+                let contacts = this.data.data.map(d => {
+                    return {
+                        name: d["Full Name"],
+                        email: d["Email Address"],
+                        title: d["Title"],
+                        phoneNumber: d["Phone Number"],
+                        dayOfBirth: d["Day of Birth"],
+                        monthOfBirth: d["Month of Birth"],
+                        dateOfBirth: new Date(
+                            `1900 ${d["Month of Birth"]} ${d["Day of Birth"]} 00:00:00`
+                        ).toISOString(),
+                    }
+                })
+                await this.$store.dispatch("POST_CONTACT", contacts);
+                this.hideModal('upload-contact')
+            } catch (e) {
+                this.$store.commit("toggleAlert", {
+                    message: "Invalid data inputted",
+                    visible: true,
+                });
+                return;
+            }finally {
+                this.$store.commit('SET_BUSY', false)
+            }
+            
+        }
 	},
 };
 </script>

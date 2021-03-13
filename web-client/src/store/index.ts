@@ -108,6 +108,8 @@ export default new vuex.Store({
                 dispatch('GET_CONTACT')
             } catch (e) {
                 commit('toggleAlert', {visible: true, type: "error", title: "Error", message: "An error occurred"})
+            } finally {
+                commit('SET_BUSY', false)
             }
         },
         async DELETE_CONTACT({ commit, dispatch }, contact: Contact) {
