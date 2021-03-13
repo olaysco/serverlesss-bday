@@ -1,7 +1,10 @@
 ### Serverless BDAY APP
-**A simple serverless APP TO send scheduled birthday messages to their contacts**
+**A simple serverless APP TO send scheduled birthday messages to their contacts, view demo [here](https://d3h7u37ism7dxj.cloudfront.net/)**
 
 ---
+## Screenshots
+![Screenshoot 1](http://bday-app-website.s3-website-us-west-2.amazonaws.com/img/bdayapp.878405fe.png)
+![Screenshoot 2](http://bday-app-website.s3-website-us-west-2.amazonaws.com/img/bdaycardpage.PNG)
 
 ## Tech Stack (Backend)
 - AWS Lambda
