@@ -5,7 +5,18 @@ export default {
       http: {
         method: 'post',
         path: '/user/images',
-        cors: true,
+        cors: {
+          origin: "*",
+          headers: [
+            "Content-Type",
+            "X-Amz-Date",
+            "Authorization",
+            "X-Api-Key",
+            "X-Amz-Security-Token",
+            "X-Amz-User-Agent"
+          ],
+          allowCredentials: true
+        },
         authorizer: "authorizer"
       }
     }

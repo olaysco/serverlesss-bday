@@ -6,7 +6,18 @@ export default {
         method: 'post',
         path: '/contact',
         authorizer: "authorizer",
-        cors: true,
+        cors: {
+          origin: "*",
+          headers: [
+            "Content-Type",
+            "X-Amz-Date",
+            "Authorization",
+            "X-Api-Key",
+            "X-Amz-Security-Token",
+            "X-Amz-User-Agent"
+          ],
+          allowCredentials: true
+        },
         documentation: {
           summary: "Post contacts",
           description: "Post contacts",
