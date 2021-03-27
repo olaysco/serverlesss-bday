@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="w-screen h-screen bg-opacity-25 z-50 absolute bg-gray-900" v-if="busy">
+		<div class="w-screen h-screen bg-opacity-25 z-40 absolute bg-gray-900" v-if="busy">
 			<div class="loader">
 				<div></div>
 				<div></div>
