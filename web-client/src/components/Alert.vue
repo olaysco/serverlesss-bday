@@ -1,5 +1,5 @@
 <template>
-	<div class="absolute top-0 w-full z-50 p-4">
+	<div class="absolute top-0 w-full z-40 p-4">
 		<div
 			class="alert flex flex-row items-center p-5 rounded border-b-2 relative"
 			v-if="alertData.visible"

@@ -133,7 +133,7 @@ export default {
 			dragging: 0,
 			data: false,
 			filename: false,
-			allowedFormat: ["text/plain", "application/vnd.ms-excel", "text/x-csv"],
+			allowedFormat: ["text/plain", "application/vnd.ms-excel", "text/x-csv", "text/csv"],
 		};
 	},
 	methods: {
@@ -167,6 +167,7 @@ export default {
 			return e.dataTransfer && e.dataTransfer.types.indexOf("Files") > -1;
 		},
 		addFile(file) {
+            console.log(file)
 			if (!file || !this.allowedFormat.includes(file.type)) {
 				return this.toggleAlert({
 					visible: true,

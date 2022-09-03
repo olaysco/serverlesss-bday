@@ -1,17 +1,11 @@
 import vue from "vue";
 import vuex from "vuex";
-import VuexPersistence from "vuex-persist";
 import Auth from "@/api/auth"
 import { Contact, User } from "@/types"
 import { RedirectLoginOptions } from "@auth0/auth0-spa-js";
 import contactApi from "@/api/contact";
 
 vue.use(vuex);
-
-const vuexPersist = new VuexPersistence<any>({
-  strictMode: true,
-  storage: sessionStorage,
-})
 
 export default new vuex.Store({
     state: {
@@ -31,7 +25,6 @@ export default new vuex.Store({
         userFetched: <boolean>false
     },
     mutations: {
-        RESTORE_MUTATION: vuexPersist.RESTORE_MUTATION, // this mutation **MUST** be named "RESTORE_MUTATION"
         showModal(state, modal) {
             state.visibleModal.push(modal);
         },
@@ -154,6 +147,7 @@ export default new vuex.Store({
                 await contactApi.updateUser(user)
                 commit('toggleAlert', {visible: true, type: "success", title: "Success", message: "Message updated"})
             } catch (e) {
+                alert(e.message)
                 commit('toggleAlert', {visible: true, type: "error", title: "Error", message: "An error occurred"})
             } finally {
                 commit('SET_BUSY', false)
@@ -171,6 +165,5 @@ export default new vuex.Store({
                 commit('SET_BUSY', false)
             }
         }
-    },
-    plugins: [vuexPersist.plugin]
+    }
 });

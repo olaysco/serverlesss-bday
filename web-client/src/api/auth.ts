@@ -11,7 +11,8 @@ class Auth {
             domain: domain,
             client_id: "7OxiATtNDzxwanpb6qTdoaKZKRc4jhLo",
             redirect_uri: `${window.location.origin}/callback`,
-            audience: "https:://olaysco-bday-auth"
+            audience: "https:://olaysco-bday-auth",
+            useRefreshTokens: true
         })
     }
     async getTokenSilently(o?: GetTokenSilentlyOptions) {
