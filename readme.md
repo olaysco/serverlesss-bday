@@ -3,8 +3,7 @@
 
 ---
 ## Screenshots
-![Screenshoot 1](http://bday-app-website.s3-website-us-west-2.amazonaws.com/img/bdayapp.878405fe.png)
-![Screenshoot 2](http://bday-app-website.s3-website-us-west-2.amazonaws.com/img/bdaycardpage.PNG)
+![Screenshoot 2](https://github.com/olaysco/serverlesss-bday/blob/master/web-client/src/assets/images/bday.gif)
 
 ## Tech Stack (Backend)
 - AWS Lambda
