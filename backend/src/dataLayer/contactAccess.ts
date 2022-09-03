@@ -196,6 +196,10 @@ export class ContactAccess {
 function createDynamoDBClient() {
   if (process.env.IS_OFFLINE) {
     logger.info('Creating a local DynamoDB instance')
+    XAWS.config = new XAWS.Config();
+    XAWS.config.accessKeyId = "xxxxxxxxxxxxxx";
+    XAWS.config.secretAccessKey = "xxxxxxxxxx";
+    XAWS.config.region = "region";
     return new XAWS.DynamoDB.DocumentClient({
       region: 'localhost',
       endpoint: 'http://localhost:8000'
